@@ -1,2 +1,2 @@
 # To-Do-backend
-DevCom Mentorship backend 2025
+DevCom Mentorship 2025
