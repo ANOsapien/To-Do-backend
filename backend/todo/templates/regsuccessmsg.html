@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration Successful</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+        }
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+        }
+        .card h1 {
+            font-size: 24px;
+            color: #4caf50;
+        }
+        .card p {
+            margin: 20px 0;
+            color: #555;
+        }
+        .card a {
+            display: inline-block;
+            padding: 10px 20px;
+            color: white;
+            background-color: #4caf50;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        .card a:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <h1>Registration Successful!</h1>
+            <p>Thank you for registering. You can now log in to your account.</p>
+            <a href="{% url "todo:login" %}">Go to Login</a>
+        </div>
+    </div>
+</body>
+</html>
+ 
