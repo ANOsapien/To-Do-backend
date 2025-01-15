@@ -124,5 +124,5 @@ STATIC_URL = "static/"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-LOGIN_REDIRECT_URL ="todo:regsuccessmsg"
+LOGIN_REDIRECT_URL ="todo:mainpage"
 LOGOUT_REDIRECT_URL ="todo:login"

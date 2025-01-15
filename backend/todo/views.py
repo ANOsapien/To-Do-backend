@@ -20,8 +20,8 @@ def authView(request):
      return render(request, "signup.html", {"form": form})
 
 @login_required
-def regsuccessmsg(request):
-     return render(request, "regsuccessmsg.html")
+def mainpage(request):
+     return render(request, "mainpage.html")
 
 @api_view(["GET", "POST"])
 def todo_list(request):

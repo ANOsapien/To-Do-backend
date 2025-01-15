@@ -2,10 +2,10 @@ from django.contrib import admin
 from django.urls import path, include
 from rest_framework import routers
 from . import views
-from .views import authView, regsuccessmsg
+from .views import authView, mainpage
 
 urlpatterns = [
-    path("", regsuccessmsg, name="regsuccessmsg"),
+    path("", mainpage, name="mainpage"),
     path("signup/", authView, name="authView"),
     path("accounts/", include("django.contrib.auth.urls")),
     path("todos/",views.todo_list),
