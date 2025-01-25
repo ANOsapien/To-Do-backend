@@ -3,8 +3,8 @@ from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import api_view
-from .serializers import TodoSerializer
-from .models import Todo
+from .serializers import TodoSerializer, CourseSerializer
+from .models import Todo, Course
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 
@@ -54,5 +54,39 @@ def todo_details(request, pk):
     elif request.method == "DELETE":
          todo.delete()
          return Response(status=status.HTTP_204_NO_CONTENT)
+
+@api_view(["GET"])
+def api_timetable(request):
+    if request.method =="GET":
+        slot = request.GET.get("slot")
+        courses = Course.objects.filter(slot=slot)
+        serializer= CourseSerializer(courses, many=True)
+        return Response(serializer.data)
+    else:
+        return Response(status= status.HTTP_400_BAD_REQUEST)
+
+@api_view(["GET", "POST"])
+def api_courses(request):
+     if request.method =="GET":
+        courses = Course.objects.all()
+        serializer= CourseSerializer(courses, many=True)
+        return Response(serializer.data)
+     
+     elif request.method == "POST":
+        serializer= CourseSerializer(data = request.data) 
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status= status.HTTP_201_CREATED) 
+        return Response(serializer.errors, status= status.HTTP_400_BAD_REQUEST)
          
+@api_view(["GET"])
+def api_search(request):
+    if request.method =="GET":
+        course_name = request.GET.get("course_name")
+        course_code = request.GET.get("course_code")
+        course = Course.objects.filter(course_name=course_name, course_code=course_code)
+        serializer= CourseSerializer(course, many=True)
+        return Response(serializer.data)
     
+    else:
+        return Response(status= status.HTTP_400_BAD_REQUEST)    
