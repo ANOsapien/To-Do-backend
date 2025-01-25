@@ -1,0 +1,126 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+    body {
+        font-family: 'Arial', sans-serif;
+        background-color: #eef2f7;
+        margin: 0;
+        padding: 0;
+    }
+
+    .profile-container {
+        max-width: 600px;
+        margin: 40px auto;
+        padding: 20px 30px;
+        background: linear-gradient(135deg, #ffffff, #f4f7fc);
+        border-radius: 15px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .profile-header {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .profile-header h1 {
+        color: #333;
+        font-size: 26px;
+        margin-bottom: 10px;
+    }
+
+    .profile-picture {
+        display: block;
+        margin: 0 auto 15px;
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        border: 5px solid #007bff;
+        object-fit: cover;
+    }
+
+    .profile-details {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .profile-field {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: #f7f9fc;
+        padding: 10px 15px;
+        border-radius: 8px;
+        border: 1px solid #dce3ec;
+    }
+
+    .profile-field strong {
+        color: #555;
+    }
+
+    .profile-field span {
+        color: #333;
+        font-weight: 600;
+    }
+
+    .edit-button {
+        display: block;
+        text-align: center;
+        margin-top: 20px;
+    }
+
+    .edit-button a {
+        display: inline-block;
+        padding: 10px 25px;
+        background: #007bff;
+        color: #fff;
+        font-weight: bold;
+        text-transform: uppercase;
+        text-decoration: none;
+        border-radius: 5px;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    .edit-button a:hover {
+        background-color: #0056b3;
+        transform: scale(1.05);
+    }
+</style>
+
+<div class="profile-container">
+    <div class="profile-header">
+        {% if has_profile_picture %}
+            <img src="{{ profile.profile_picture.url }}" alt="Profile Picture" class="profile-picture">
+        {% else %}
+        {% load static %}
+        <img src="{% static 'images/default.jpg' %}" alt="Profile Picture" class="profile-picture">        
+        {% endif %}
+        <h1>Profile Page</h1>
+    </div>
+
+    <div class="profile-details">
+        <div class="profile-field">
+            <strong>Username:</strong>
+            <span>{{ profile.user.username }}</span>
+        </div>
+        <div class="profile-field">
+            <strong>Email:</strong>
+            <span>{{ profile.user.email }}</span>
+        </div>
+        <div class="profile-field">
+            <strong>Bio:</strong>
+            <span>{{ profile.bio }}</span>
+        </div>
+        <div class="profile-field">
+            <strong>Location:</strong>
+            <span>{{ profile.location }}</span>
+        </div>
+    </div>
+
+    <div class="edit-button">
+        <a href="{% url 'edit_profile' %}">Edit Profile</a>
+    </div>
+</div>
+{% endblock %}
+

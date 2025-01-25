@@ -7,6 +7,8 @@ from .serializers import TodoSerializer
 from .models import Todo
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
+from .models import Profile
+from .forms import ProfileForm
 
 # Create your views here.
 def authView(request):
@@ -18,10 +20,29 @@ def authView(request):
      else:
          form= UserCreationForm()
      return render(request, "signup.html", {"form": form})
+@login_required
+def profile_view(request):
+    profile, created = Profile.objects.get_or_create(user=request.user)
+    return render(request, 'profile.html', {
+        'profile': profile,
+        'has_profile_picture': bool(profile.profile_picture and profile.profile_picture.name),
+    })
 
 @login_required
 def mainpage(request):
      return render(request, "mainpage.html")
+
+@login_required
+def edit_profile_view(request):
+    profile, created = Profile.objects.get_or_create(user=request.user)
+    if request.method == 'POST':
+        form = ProfileForm(request.POST, request.FILES, instance=profile)
+        if form.is_valid():
+            form.save()
+            return redirect('profile')
+    else:
+        form = ProfileForm(instance=profile)
+    return render(request, 'edit_profile.html', {'form': form})
 
 @api_view(["GET", "POST"])
 def todo_list(request):
