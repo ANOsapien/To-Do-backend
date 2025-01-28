@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notifications</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .container { max-width: 600px; margin: auto; }
+        .section { margin-bottom: 20px; }
+        h2 { color: #d9534f; }
+        ul { list-style-type: none; padding: 0; }
+        li { padding: 10px; border-bottom: 1px solid #ddd; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔔 Notifications</h1>
+
+        <div class="section">
+            <h2>Overdue Tasks</h2>
+            <ul>
+                {% for task in overdue_tasks %}
+                    <li>{{ task.title }} - Due: {{ task.due_date }}</li>
+                {% empty %}
+                    <li>No overdue tasks! 🎉</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>Due Today</h2>
+            <ul>
+                {% for task in due_today_tasks %}
+                    <li>{{ task.title }} - Due: {{ task.due_date }}</li>
+                {% empty %}
+                    <li>No tasks due today! 👍</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

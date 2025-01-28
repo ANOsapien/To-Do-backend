@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+    .priority-dropdown {
+        appearance: none;
+        background: white;
+        padding: 8px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .priority-dropdown option[value="1"] { color: red; }
+    .priority-dropdown option[value="2"] { color: orange; }
+    .priority-dropdown option[value="3"] { color: blue; }
+    .priority-dropdown option[value="4"] { color: green; }
+
+    .priority-button {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        background: #fff;
+        padding: 8px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .priority-button img {
+        width: 16px;
+        height: 16px;
+    }
+
+    .priority-dropdown-container {
+        position: relative;
+        display: inline-block;
+    }
+
+    .priority-options {
+        display: none;
+        position: absolute;
+        background: white;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        padding: 5px;
+        list-style: none;
+        width: 120px;
+    }
+
+    .priority-options li {
+        padding: 5px;
+        cursor: pointer;
+    }
+
+    .priority-options li:hover {
+        background: #f4f4f4;
+    }
+
+    .priority-container:hover .priority-options {
+        display: block;
+    }
+</style>
+
+<div class="container">
+    <h2>Add Task</h2>
+    <form method="POST">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label>Task Name</label>
+            {{ form.title }}
+        </div>
+        <div class="mb-3">
+            <label>Date</label>
+            {{ form.due_date }}
+        </div>
+        <div class="mb-3 priority-container">
+            <label>Priority</label>
+            <button type="button" class="priority-button">
+                <img src="{% static 'images/flag.png' %}" alt="Priority"> Priority
+            </button>
+            <ul class="priority-options">
+                <li data-value="1" style="color: red;">🚩 Priority 1</li>
+                <li data-value="2" style="color: orange;">🏴 Priority 2</li>
+                <li data-value="3" style="color: blue;">🏁 Priority 3</li>
+                <li data-value="4" style="color: green;">🏳 Priority 4</li>
+            </ul>
+            {{ form.priority }}
+        </div>
+        <button type="submit" class="btn btn-success">Add Task</button>
+    </form>
+</div>
+
+<script>
+    document.querySelectorAll(".priority-options li").forEach(item => {
+        item.addEventListener("click", function () {
+            document.querySelector(".priority-button").innerHTML = this.innerHTML;
+            document.querySelector(".priority-dropdown").value = this.getAttribute("data-value");
+        });
+    });
+</script>
+{% endblock %}

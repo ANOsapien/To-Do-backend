@@ -1,9 +1,132 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prodify - Task Manager</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+        .task-container {
+            width: 50%;
+            max-width: 600px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .task {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        .task:last-child {
+            border-bottom: none;
+        }
+        .task input[type="checkbox"] {
+            margin-right: 10px;
+        }
+        .task-details {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        .due-date {
+            font-size: 12px;
+            color: gray;
+        }
+        .priority {
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 12px;
+            color: white;
+        }
+        .priority-1 { background: #ff6b6b; }
+        .priority-2 { background: #feca57; }
+        .priority-3 { background: #48dbfb; }
+        .priority-4 { background: #1dd1a1; }
+        .add-task {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .add-task input, .add-task select, .add-task button {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .add-task button {
+            background-color: #ff6b6b;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .delete-btn {
+            background-color: red;
+            color: white;
+            padding: 5px 10px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+    </style>
 </head>
 <body>
-    <h1>welcome to prodify mainpage</h1>     
-    <a href="{% url "todo:login" %}">Go to Login</a>
+    <h1>Welcome to Prodify</h1> 
+    <div class="task-container">
+        <h2>Your Tasks</h2>
+
+        {% for task in tasks %}
+        <div class="task">
+            <!-- Mark task as completed -->
+            <form method="POST" action="{% url 'todo:mark_completed' task.id %}">
+                {% csrf_token %}
+                <input type="checkbox" {% if task.completed %}checked{% endif %} onChange="this.form.submit();">
+            </form>
+
+            <div class="task-details">
+                <span {% if task.completed %}style="text-decoration: line-through;"{% endif %}>
+                    {{ task.title }}
+                </span>
+                <span class="due-date">Due: {{ task.due_date }}</span>
+            </div>
+            <span class="priority priority-{{ task.priority }}">Priority {{ task.priority }}</span>
+
+            <!-- Delete Task Button -->
+            <form method="POST" action="{% url 'todo:delete_task' task.id %}">
+                {% csrf_token %}
+                <button type="submit" class="delete-btn">Delete</button>
+            </form>
+        </div>
+        {% empty %}
+        <p>No tasks available</p>
+        {% endfor %}
+
+        <!-- Add Task Form -->
+        <form method="POST" class="add-task">
+            {% csrf_token %}
+            <input type="text" name="title" placeholder="Task name" required>
+            <input type="date" name="due_date" required>
+            <select name="priority">
+                <option value="1">Priority 1</option>
+                <option value="2">Priority 2</option>
+                <option value="3">Priority 3</option>
+                <option value="4">Priority 4</option>
+            </select>
+            <button type="submit">Add Task</button>
+        </form>
+    </div>
+
+    <a href="{% url 'todo:login' %}">Logout</a>
+    <a href="{% url 'todo:profile' %}">profile</a>
+    <a href="{% url 'todo:notifications' %}">Notifications</a>
 </body>
 </html>

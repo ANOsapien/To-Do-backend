@@ -90,7 +90,7 @@
 
 <div class="profile-container">
     <div class="profile-header">
-        {% if has_profile_picture %}
+        {% if profile.profile_picture %}
             <img src="{{ profile.profile_picture.url }}" alt="Profile Picture" class="profile-picture">
         {% else %}
         {% load static %}
@@ -105,16 +105,16 @@
             <span>{{ profile.user.username }}</span>
         </div>
         <div class="profile-field">
+            <strong>First Name:</strong>
+            <span>{{ profile.first_name }}</span>
+        </div>
+        <div class="profile-field">
+            <strong>Last Name:</strong>
+            <span>{{ profile.last_name }}</span>
+        </div>
+        <div class="profile-field">
             <strong>Email:</strong>
-            <span>{{ profile.user.email }}</span>
-        </div>
-        <div class="profile-field">
-            <strong>Bio:</strong>
-            <span>{{ profile.bio }}</span>
-        </div>
-        <div class="profile-field">
-            <strong>Location:</strong>
-            <span>{{ profile.location }}</span>
+            <span>{{ profile.email }}</span>
         </div>
     </div>
 
@@ -123,4 +123,3 @@
     </div>
 </div>
 {% endblock %}
-
