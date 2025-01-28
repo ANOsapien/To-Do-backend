@@ -1,9 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.core.exceptions import ValidationError
-from datetime import time
 from .constants import SLOT_CHOICES, LAB_CHOICES
-from .utils import get_slot_timing, is_slot_available
+from .utils import get_slot_timing
 
 # Create your models here.
 class Todo(models.Model):
@@ -26,7 +24,7 @@ class Course(models.Model):
     course_description = models.TextField(null=True, blank=True)
     review = models.TextField(null=True, blank=True)
     ratings = models.FloatField(null=True, blank=True)
-    
+
     # Time-related fields
     slot = models.CharField(
         max_length=200,
@@ -36,6 +34,7 @@ class Course(models.Model):
     )
     start_time = models.TimeField(null=True, blank=True)
     end_time = models.TimeField(null=True, blank=True)
+    day = models.CharField(max_length=200, null=True, blank=True)
 
     def clean(self):
         if self.slot:
@@ -44,6 +43,7 @@ class Course(models.Model):
             if slot_info:
                 self.start_time = slot_info['start']
                 self.end_time = slot_info['end']
+                self.day = slot_info['day']
 
     def save(self, *args, **kwargs):
         self.clean()
@@ -58,13 +58,25 @@ class Course(models.Model):
 class Timetable(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     course = models.ForeignKey(Course, on_delete=models.CASCADE, null=True, blank=True)
+    slot = models.CharField(max_length=200, choices=SLOT_CHOICES + LAB_CHOICES, null=True, blank=True)
     start_time = models.TimeField(null=True, blank=True)
     end_time = models.TimeField(null=True, blank=True)
     day = models.CharField(max_length=200, null=True, blank=True)
-    slot = models.CharField(max_length=200, null=True, blank=True)
     
+    def clean(self):
+        if self.slot:
+            slot_info = get_slot_timing(self.slot)
+            if slot_info:
+                self.start_time = slot_info['start']
+                self.end_time = slot_info['end']
+                self.day = slot_info['day']
+
+    def save(self, *args, **kwargs):
+        self.clean()
+        super().save(*args, **kwargs)
+
     def __str__(self):
         return self.course.course_name
     
     class Meta:
-        ordering = ['day', 'start_time']
+        ordering = ['slot']
