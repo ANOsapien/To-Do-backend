@@ -4,6 +4,8 @@ from . import models
 from django.http import JsonResponse
 from .models import UserProfile
 import json
+from django.views.decorators.csrf import csrf_exempt
+
 
 def get_UserDetails(request, user_id):
     try:
@@ -16,8 +18,11 @@ def get_UserDetails(request, user_id):
         })
     except models.DoesNotExist:
         return JsonResponse({"error": "User not found"}, status=404)
-    
+
+@csrf_exempt 
 def updateRecord(request, user_id):
+    print("Request Method:", request.method)  # Debugging
+    print("Request Body:", request.body)  # Debugging
     if request.method == 'PUT':
         try:
             user = UserProfile.objects.get(id=user_id)
